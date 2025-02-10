@@ -1,4 +1,4 @@
-<REPLACE># Uniswap v4 Pool Indexer
+# Uniswap v4 Pool Indexer
 
 A [Ponder](https://ponder.sh) indexer that tracks Uniswap v4 pool deployments across multiple networks. This indexer monitors the `Initialize` event from the PoolManager contract to track new pool creations and their parameters.
 
