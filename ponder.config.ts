@@ -25,6 +25,18 @@ export default createConfig({
       chainId: 8453,
       transport: http(process.env.PONDER_RPC_URL_8453),
     },
+    polygon: {
+      chainId: 137,
+      transport: http(process.env.PONDER_RPC_URL_137),
+    },
+    worldchain: {
+      chainId: 480,
+      transport: http(process.env.PONDER_RPC_URL_480),
+    },
+    blast: {
+      chainId: 81457,
+      transport: http(process.env.PONDER_RPC_URL_81457),
+    },
   },
   contracts: {
     PoolManager: {
@@ -48,6 +60,19 @@ export default createConfig({
         base: {
           address: "0x498581ff718922c3f8e6a244956af099b2652b2b",
           startBlock: 25350988,
+        },
+        polygon: {
+          address: "0x67366782805870060151383f4bbff9dab53e5cd6",
+          startBlock: 66980384,
+        },
+        worldchain: {
+          address: "0xb1860d529182ac3bc1f51fa2abd56662b7d13f33",
+          startBlock: 9111872,
+        },
+        blast: {
+          address: "0x1631559198a9e474033433b2958dabc135ab6446",
+          startBlock: 14377311,
+
         },
       },
       abi: PoolManagerAbi,
