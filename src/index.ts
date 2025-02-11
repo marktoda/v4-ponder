@@ -30,8 +30,11 @@ ponder.on("PoolManager:Swap", async ({ event, context }) => {
 });
 
 ponder.on("PoolManager:ModifyLiquidity", async ({ event, context }) => {
+  // determine the positionId, the same hash used by PoolManager / Position.sol
   const positionId = keccak256(encodePacked([event.args.sender, event.args.tickLower, event.args.tickUpper, event.args.salt], ["address", "int24", "int24", "bytes32"]));
 
+  // upsert into `position` table
+  // for cases where the position exists, update the position's liquidity according to the event
   await context.db.insert(schema.position).values({
     positionId: positionId,
     poolId: event.args.id,
