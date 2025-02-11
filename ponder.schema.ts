@@ -12,6 +12,7 @@ export const pool = onchainTable("pool", (t) => ({
   (table) => ({
     pk: primaryKey({ columns: [table.poolId, table.chainId] }),
     poolIdIndex: index().on(table.poolId),
+    chainIdIndex: index().on(table.chainId),
   })
 );
 
@@ -34,6 +35,7 @@ export const swap = onchainTable("swap", (t) => ({
   (table) => ({
     poolIdIndex: index().on(table.poolId),
     senderIndex: index().on(table.sender),
+    chainIdIndex: index().on(table.chainId),
   })
 );
 
