@@ -55,6 +55,7 @@ export const position = onchainTable("position", (t) => ({
   (table) => ({
     poolIdIndex: index().on(table.poolId),
     ownerIndex: index().on(table.owner),
+    chainIdIndex: index().on(table.chainId),
   })
 );
 
