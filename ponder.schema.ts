@@ -40,5 +40,5 @@ export const swap = onchainTable("swap", (t) => ({
 );
 
 export const swapRelations = relations(swap, ({ one }) => ({
-  pool: one(pool, { fields: [swap.poolId], references: [pool.poolId] }),
+  pool: one(pool, { fields: [swap.poolId, swap.chainId], references: [pool.poolId, pool.chainId] }),
 }));
