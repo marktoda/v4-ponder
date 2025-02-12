@@ -40,7 +40,7 @@ export default createConfig({
 
     // Sepolia Networks
     ethereum_sepolia: {
-      chainId: 1337,
+      chainId: 11155111,
       transport: http(process.env.PONDER_RPC_URL_11155111),
     },
     unichain_sepolia: {
