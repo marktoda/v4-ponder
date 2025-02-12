@@ -40,7 +40,7 @@ yarn install
 ```
 
 3. Configure environment variables:
-   Create a `.env` file with RPC URLs for the networks you want to index:
+   Create a `.env.local` file with RPC URLs for the networks you want to index:
 
 ```env
 PONDER_RPC_URL_1=<ethereum-mainnet-rpc-url>
@@ -51,6 +51,11 @@ PONDER_RPC_URL_137=<polygon-rpc-url>
 PONDER_RPC_URL_130=<unichain-rpc-url>
 PONDER_RPC_URL_480=<worldchain-rpc-url>
 PONDER_RPC_URL_81457=<blast-rpc-url>
+
+PONDER_RPC_URL_11155111=<sepolia-rpc-url>
+PONDER_RPC_URL_1301=<unichain-sepolia-rpc-url>
+PONDER_RPC_URL_84532=<base-sepolia-rpc-url>
+PONDER_RPC_URL_421614=<arbitrum-sepolia-rpc-url>
 ```
 
 4. Start the indexer:
