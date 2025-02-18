@@ -12,6 +12,7 @@ export const pool = onchainTable("pool", (t) => ({
   (table) => ({
     pk: primaryKey({ columns: [table.poolId, table.chainId] }),
     poolIdIndex: index().on(table.poolId),
+    chainIdIndex: index().on(table.chainId),
   })
 );
 
@@ -34,9 +35,10 @@ export const swap = onchainTable("swap", (t) => ({
   (table) => ({
     poolIdIndex: index().on(table.poolId),
     senderIndex: index().on(table.sender),
+    chainIdIndex: index().on(table.chainId),
   })
 );
 
 export const swapRelations = relations(swap, ({ one }) => ({
-  pool: one(pool, { fields: [swap.poolId], references: [pool.poolId] }),
+  pool: one(pool, { fields: [swap.poolId, swap.chainId], references: [pool.poolId, pool.chainId] }),
 }));
