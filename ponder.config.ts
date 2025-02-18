@@ -4,6 +4,7 @@ import { http } from "viem";
 import { PoolManagerAbi } from "./abis/PoolManager";
 
 export default createConfig({
+  ordering: "multichain",
   networks: {
     mainnet: {
       chainId: 1,
