@@ -1,5 +1,6 @@
 import { ponder } from "ponder:registry";
 import schema from "ponder:schema";
+import { encodePacked, keccak256 } from "viem";
 
 // Define minimal ERC20 ABI
 const ERC20_ABI = [
@@ -138,4 +139,22 @@ ponder.on("PoolManager:Swap", async ({ event, context }) => {
     chainId: context.network.chainId,
     blockNumber: event.block.number,
   });
+});
+
+ponder.on("PoolManager:ModifyLiquidity", async ({ event, context }) => {
+  // determine the positionId, the same hash used by PoolManager / Position.sol
+  const positionId = keccak256(encodePacked([event.args.sender, event.args.tickLower, event.args.tickUpper, event.args.salt], ["address", "int24", "int24", "bytes32"]));
+
+  // upsert into `position` table
+  // for cases where the position exists, update the position's liquidity according to the event
+  await context.db.insert(schema.position).values({
+    positionId: positionId,
+    poolId: event.args.id,
+    owner: event.args.sender,
+    tickLower: BigInt(event.args.tickLower),
+    tickUpper: BigInt(event.args.tickUpper),
+    liquidity: event.args.liquidityDelta,
+    salt: event.args.salt,
+    chainId: context.network.chainId,
+  }).onConflictDoUpdate((row) => ({ liquidity: row.liquidity + event.args.liquidityDelta }));
 });

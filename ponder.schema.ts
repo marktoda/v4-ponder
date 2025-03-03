@@ -15,6 +15,10 @@ export const token = onchainTable("token", (t) => ({
   })
 );
 
+export const tokenRelations = relations(token, ({ many }) => ({
+  pools: many(pool),
+}));
+
 export const pool = onchainTable("pool", (t) => ({
   poolId: t.hex().notNull(),
   currency0: t.hex().notNull(),
@@ -34,6 +38,7 @@ export const pool = onchainTable("pool", (t) => ({
 
 export const poolRelations = relations(pool, ({ many, one }) => ({
   swaps: many(swap),
+  positions: many(position),
   token0: one(token, { fields: [pool.currency0, pool.chainId], references: [token.address, token.chainId] }),
   token1: one(token, { fields: [pool.currency1, pool.chainId], references: [token.address, token.chainId] }),
 }));
@@ -55,6 +60,7 @@ export const swap = onchainTable("swap", (t) => ({
     poolIdIndex: index().on(table.poolId),
     senderIndex: index().on(table.sender),
     chainIdIndex: index().on(table.chainId),
+    poolIdChainIdIndex: index().on(table.poolId, table.chainId)
   })
 );
 
@@ -62,6 +68,24 @@ export const swapRelations = relations(swap, ({ one }) => ({
   pool: one(pool, { fields: [swap.poolId, swap.chainId], references: [pool.poolId, pool.chainId] }),
 }));
 
-export const tokenRelations = relations(token, ({ many }) => ({
-  pools: many(pool),
+export const position = onchainTable("position", (t) => ({
+  positionId: t.hex().primaryKey(),
+  poolId: t.hex().notNull(),
+  owner: t.hex().notNull(),
+  tickLower: t.bigint().notNull(),
+  tickUpper: t.bigint().notNull(),
+  liquidity: t.bigint().notNull(),
+  salt: t.hex().notNull(),
+  chainId: t.integer().notNull(),
+}),
+  (table) => ({
+    poolIdIndex: index().on(table.poolId),
+    ownerIndex: index().on(table.owner),
+    chainIdIndex: index().on(table.chainId),
+    poolIdChainIdIndex: index().on(table.poolId, table.chainId),
+  })
+);
+
+export const positionRelations = relations(position, ({ one }) => ({
+  pool: one(pool, { fields: [position.poolId], references: [pool.poolId] }),
 }));
