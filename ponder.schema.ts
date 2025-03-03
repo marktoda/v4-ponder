@@ -54,7 +54,7 @@ export const swap = onchainTable("swap", (t) => ({
   tick: t.integer().notNull(),
   fee: t.integer().notNull(),
   chainId: t.integer().notNull(),
-  blockNumber: t.integer().notNull(),
+  blockNumber: t.bigint().notNull(),
 }),
   (table) => ({
     poolIdIndex: index().on(table.poolId),
