@@ -135,38 +135,51 @@ Example queries:
 ```graphql
 # Get pools with their token information
 query {
-  pools(first: 10) {
-    poolId
-    chainId
-    fee
-    token0 {
-      address
-      name
-      symbol
-      decimals
+  pools(limit:10) {
+    items {
+     chainId
+      fee
+      token0 {
+        address
+        name
+        symbol
+        decimals
+      }
+      token1 {
+        address
+        name
+        symbol
+        decimals
+      } 
     }
-    token1 {
-      address
-      name
-      symbol
-      decimals
+  }
+}
+
+#Get Positions for a specific pool
+query {
+  positions (where: {owner: "0xf8...654"}) {
+    items {
+      poolId,
+      positionId,
+      chainId,
+      owner,
+      tickLower,
+      tickUpper,
+      chainId
     }
   }
 }
 
 # Get tokens with their pools
 query {
-  tokens(where: {symbol: {contains: "ETH"}}) {
-    address
-    name
-    symbol
-    decimals
-    chainId
-    poolsAsToken0 {
-      poolId
-    }
-    poolsAsToken1 {
-      poolId
+  tokens (where: {symbol_contains: "ETH" }) {
+    items {
+      address,
+      chainId,
+      name,
+      symbol,
+      decimals,
+      creationBlock,
     }
   }
 }
@@ -192,6 +205,9 @@ query {
   }
 }
 ```
+
+### Sample query
+![sample_query](/sample_query.png)
 
 ## How It Works
 
