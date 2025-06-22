@@ -106,7 +106,7 @@ async function indexToken(
 }
 
 ponder.on("PoolManager:Initialize", async ({ event, context }) => {
-  const chainId = context.network.chainId;
+  const chainId = context.chain.id;
 
   // Index the tokens first
   await indexToken(context, event.args.currency0, chainId);
@@ -121,13 +121,13 @@ ponder.on("PoolManager:Initialize", async ({ event, context }) => {
     tickSpacing: event.args.tickSpacing,
     hooks: event.args.hooks,
     chainId,
-    creationBlock: event.block.number,
+    creationBlock: Number(event.block.number),
   });
 });
 
 ponder.on("PoolManager:Swap", async ({ event, context }) => {
   await context.db.insert(schema.swap).values({
-    id: event.log.id,
+    id: event.id,
     poolId: event.args.id,
     sender: event.args.sender,
     amount0: event.args.amount0,
@@ -136,7 +136,7 @@ ponder.on("PoolManager:Swap", async ({ event, context }) => {
     liquidity: event.args.liquidity,
     tick: event.args.tick,
     fee: event.args.fee,
-    chainId: context.network.chainId,
+    chainId: context.chain.id,
     blockNumber: event.block.number,
   });
 });
@@ -155,6 +155,6 @@ ponder.on("PoolManager:ModifyLiquidity", async ({ event, context }) => {
     tickUpper: BigInt(event.args.tickUpper),
     liquidity: event.args.liquidityDelta,
     salt: event.args.salt,
-    chainId: context.network.chainId,
+    chainId: context.chain.id,
   }).onConflictDoUpdate((row) => ({ liquidity: row.liquidity + event.args.liquidityDelta }));
 });
