@@ -1,4 +1,4 @@
-import { ponder } from "ponder:registry";
+import { Context, ponder } from "ponder:registry";
 import schema from "ponder:schema";
 import { encodePacked, keccak256 } from "viem";
 
@@ -27,17 +27,11 @@ const ERC20_ABI = [
   }
 ];
 
-// Define context type
-type PonderContext = {
-  db: any;
-  client: any;
-  network: { chainId: number; name: string };
-};
 
 // Helper function to safely fetch token metadata
 async function getTokenMetadata(
-  context: PonderContext,
-  address: string,
+  context: Context,
+  address: `0x${string}`,
   chainId: number
 ) {
   // Special case for address(0) which represents native ETH
@@ -52,18 +46,21 @@ async function getTokenMetadata(
       abi: ERC20_ABI,
       address,
       functionName: "name",
+      retryEmptyResponse: false
     });
 
     const symbol = await context.client.readContract({
       abi: ERC20_ABI,
       address,
       functionName: "symbol",
+      retryEmptyResponse: false
     });
 
     const decimals = await context.client.readContract({
       abi: ERC20_ABI,
       address,
       functionName: "decimals",
+      retryEmptyResponse: false
     });
 
     return { name, symbol, decimals };
@@ -76,8 +73,8 @@ async function getTokenMetadata(
 
 // Index token metadata
 async function indexToken(
-  context: PonderContext,
-  address: string,
+  context: Context,
+  address: `0x${string}`,
   chainId: number
 ) {
   // Check if token already exists in database
@@ -127,7 +124,7 @@ ponder.on("PoolManager:Initialize", async ({ event, context }) => {
 
 ponder.on("PoolManager:Swap", async ({ event, context }) => {
   await context.db.insert(schema.swap).values({
-    id: event.log.id,
+    id: event.id,
     poolId: event.args.id,
     sender: event.args.sender,
     amount0: event.args.amount0,
