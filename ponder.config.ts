@@ -9,56 +9,56 @@ export default createConfig({
     directory: "./.ponder/pglite",
   },
   chains: {
-    mainnet: {
-      id: 1,
-      rpc: (process.env.PONDER_RPC_URL_1),
-    },
-    unichain: {
-      id: 130,
-      rpc: (process.env.PONDER_RPC_URL_130),
-    },
-    arbitrum: {
-      id: 42161,
-      rpc: (process.env.PONDER_RPC_URL_42161),
-    },
-    optimism: {
-      id: 10,
-      rpc: (process.env.PONDER_RPC_URL_10),
-    },
+    // mainnet: {
+    //   id: 1,
+    //   rpc: (process.env.PONDER_RPC_URL_1),
+    // },
+    // unichain: {
+    //   id: 130,
+    //   rpc: (process.env.PONDER_RPC_URL_130),
+    // },
+    // arbitrum: {
+    //   id: 42161,
+    //   rpc: (process.env.PONDER_RPC_URL_42161),
+    // },
+    // optimism: {
+    //   id: 10,
+    //   rpc: (process.env.PONDER_RPC_URL_10),
+    // },
     base: {
       id: 8453,
       rpc: (process.env.PONDER_RPC_URL_8453),
     },
-    polygon: {
-      id: 137,
-      rpc: (process.env.PONDER_RPC_URL_137),
-    },
-    worldchain: {
-      id: 480,
-      rpc: (process.env.PONDER_RPC_URL_480),
-    },
-    blast: {
-      id: 81457,
-      rpc: (process.env.PONDER_RPC_URL_81457),
-    },
-
-    // Sepolia Networks
-    ethereum_sepolia: {
-      id: 11155111,
-      rpc: (process.env.PONDER_RPC_URL_11155111),
-    },
-    unichain_sepolia: {
-      id: 1301,
-      rpc: (process.env.PONDER_RPC_URL_1301),
-    },
-    base_sepolia: {
-      id: 84532,
-      rpc: (process.env.PONDER_RPC_URL_84532),
-    },
-    arbitrum_sepolia: {
-      id: 421614,
-      rpc: (process.env.PONDER_RPC_URL_421614),
-    },
+    // polygon: {
+    //   id: 137,
+    //   rpc: (process.env.PONDER_RPC_URL_137),
+    // },
+    // worldchain: {
+    //   id: 480,
+    //   rpc: (process.env.PONDER_RPC_URL_480),
+    // },
+    // blast: {
+    //   id: 81457,
+    //   rpc: (process.env.PONDER_RPC_URL_81457),
+    // },
+    //
+    // // Sepolia Networks
+    // ethereum_sepolia: {
+    //   id: 11155111,
+    //   rpc: (process.env.PONDER_RPC_URL_11155111),
+    // },
+    // unichain_sepolia: {
+    //   id: 1301,
+    //   rpc: (process.env.PONDER_RPC_URL_1301),
+    // },
+    // base_sepolia: {
+    //   id: 84532,
+    //   rpc: (process.env.PONDER_RPC_URL_84532),
+    // },
+    // arbitrum_sepolia: {
+    //   id: 421614,
+    //   rpc: (process.env.PONDER_RPC_URL_421614),
+    // },
   },
   contracts: {
     PoolManager: {
