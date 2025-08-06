@@ -113,16 +113,6 @@ export default createConfig({
         // }
       },
       abi: PoolManagerAbi,
-      filter: [
-        {
-          event: "Initialize",
-          args: {}
-        },
-        {
-          event: "Swap",
-          args: {}
-        },
-      ],
     },
   },
 });

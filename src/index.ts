@@ -1,6 +1,6 @@
-import { Context, ponder } from "ponder:registry";
+import { ponder, type Context} from "ponder:registry";
 import schema from "ponder:schema";
-import { encodePacked, keccak256 } from "viem";
+import { Address, encodePacked, keccak256 } from "viem";
 
 // Define minimal ERC20 ABI
 const ERC20_ABI = [
@@ -25,43 +25,41 @@ const ERC20_ABI = [
     outputs: [{ type: "uint8" }],
     stateMutability: "view"
   }
-];
-
+] as const;
 
 // Helper function to safely fetch token metadata
 async function getTokenMetadata(
   context: Context,
-  address: `0x${string}`,
+  address: Address,
   chainId: number
 ) {
   // Special case for address(0) which represents native ETH
   if (address === "0x0000000000000000000000000000000000000000") {
-    const token = { name: "Ethereum", symbol: "ETH" };
     return { name: "Ethereum", symbol: "ETH", decimals: 18 };
   }
 
   try {
     // Fetch token metadata
-    const name = await context.client.readContract({
-      abi: ERC20_ABI,
-      address,
-      functionName: "name",
-      retryEmptyResponse: false
-    });
-
-    const symbol = await context.client.readContract({
-      abi: ERC20_ABI,
-      address,
-      functionName: "symbol",
-      retryEmptyResponse: false
-    });
-
-    const decimals = await context.client.readContract({
-      abi: ERC20_ABI,
-      address,
-      functionName: "decimals",
-      retryEmptyResponse: false
-    });
+    const [name, symbol, decimals] = await Promise.all([
+      context.client.readContract({
+        abi: ERC20_ABI,
+        address,
+        functionName: "name",
+        retryEmptyResponse: false,
+      }),
+      context.client.readContract({
+        abi: ERC20_ABI,
+        address,
+        functionName: "symbol",
+        retryEmptyResponse: false,
+      }),
+      context.client.readContract({
+        abi: ERC20_ABI,
+        address,
+        functionName: "decimals",
+        retryEmptyResponse: false,
+      }),
+    ]);
 
     return { name, symbol, decimals };
   } catch (error) {
@@ -74,8 +72,9 @@ async function getTokenMetadata(
 // Index token metadata
 async function indexToken(
   context: Context,
-  address: `0x${string}`,
-  chainId: number
+  address: Address,
+  chainId: number,
+  creationBlock: number
 ) {
   // Check if token already exists in database
   const existingToken = await context.db.find(schema.token, {
@@ -98,7 +97,7 @@ async function indexToken(
     name,
     symbol,
     decimals,
-    creationBlock: context.client.blockNumber || 0,
+    creationBlock
   });
 }
 
@@ -106,8 +105,10 @@ ponder.on("PoolManager:Initialize", async ({ event, context }) => {
   const chainId = context.chain.id;
 
   // Index the tokens first
-  await indexToken(context, event.args.currency0, chainId);
-  await indexToken(context, event.args.currency1, chainId);
+  await Promise.all([
+    indexToken(context, event.args.currency0, chainId, Number(event.block.number)),
+    indexToken(context, event.args.currency1, chainId, Number(event.block.number)),
+  ]);
 
   // Index pool
   await context.db.insert(schema.pool).values({
@@ -118,7 +119,7 @@ ponder.on("PoolManager:Initialize", async ({ event, context }) => {
     tickSpacing: event.args.tickSpacing,
     hooks: event.args.hooks,
     chainId,
-    creationBlock: event.block.number,
+    creationBlock: Number(event.block.number),
   });
 });
 
