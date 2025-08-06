@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { ponder, type Context} from "ponder:registry";
+=======
+import { Context, ponder } from "ponder:registry";
+>>>>>>> upstream/base-only
 import schema from "ponder:schema";
 import { Address, encodePacked, keccak256 } from "viem";
 
@@ -25,12 +29,21 @@ const ERC20_ABI = [
     outputs: [{ type: "uint8" }],
     stateMutability: "view"
   }
+<<<<<<< HEAD
 ] as const;
+=======
+];
+
+>>>>>>> upstream/base-only
 
 // Helper function to safely fetch token metadata
 async function getTokenMetadata(
   context: Context,
+<<<<<<< HEAD
   address: Address,
+=======
+  address: `0x${string}`,
+>>>>>>> upstream/base-only
   chainId: number
 ) {
   // Special case for address(0) which represents native ETH
@@ -40,6 +53,7 @@ async function getTokenMetadata(
 
   try {
     // Fetch token metadata
+<<<<<<< HEAD
     const [name, symbol, decimals] = await Promise.all([
       context.client.readContract({
         abi: ERC20_ABI,
@@ -57,6 +71,28 @@ async function getTokenMetadata(
         functionName: "decimals",
       }),
     ]);
+=======
+    const name = await context.client.readContract({
+      abi: ERC20_ABI,
+      address,
+      functionName: "name",
+      retryEmptyResponse: false
+    });
+
+    const symbol = await context.client.readContract({
+      abi: ERC20_ABI,
+      address,
+      functionName: "symbol",
+      retryEmptyResponse: false
+    });
+
+    const decimals = await context.client.readContract({
+      abi: ERC20_ABI,
+      address,
+      functionName: "decimals",
+      retryEmptyResponse: false
+    });
+>>>>>>> upstream/base-only
 
     return { name, symbol, decimals };
   } catch (error) {
@@ -69,9 +105,14 @@ async function getTokenMetadata(
 // Index token metadata
 async function indexToken(
   context: Context,
+<<<<<<< HEAD
   address: Address,
   chainId: number,
   creationBlock: number
+=======
+  address: `0x${string}`,
+  chainId: number
+>>>>>>> upstream/base-only
 ) {
   // Check if token already exists in database
   const existingToken = await context.db.find(schema.token, {
