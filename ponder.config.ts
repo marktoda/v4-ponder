@@ -81,7 +81,7 @@ export default createConfig({
         // },
         base: {
           address: "0x498581ff718922c3f8e6a244956af099b2652b2b",
-          startBlock: 25350988,
+          startBlock: "latest",
         },
         // polygon: {
         //   address: "0x67366782805870060151383f4bbff9dab53e5cd6",
