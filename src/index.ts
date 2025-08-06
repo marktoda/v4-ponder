@@ -45,16 +45,19 @@ async function getTokenMetadata(
         abi: ERC20_ABI,
         address,
         functionName: "name",
+        retryEmptyResponse: false,
       }),
       context.client.readContract({
         abi: ERC20_ABI,
         address,
         functionName: "symbol",
+        retryEmptyResponse: false,
       }),
       context.client.readContract({
         abi: ERC20_ABI,
         address,
         functionName: "decimals",
+        retryEmptyResponse: false,
       }),
     ]);
 
