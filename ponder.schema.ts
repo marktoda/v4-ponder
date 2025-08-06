@@ -69,7 +69,7 @@ export const swapRelations = relations(swap, ({ one }) => ({
 }));
 
 export const position = onchainTable("position", (t) => ({
-  positionId: t.hex().primaryKey(),
+  positionId: t.hex().notNull(),
   poolId: t.hex().notNull(),
   owner: t.hex().notNull(),
   tickLower: t.bigint().notNull(),
@@ -79,6 +79,8 @@ export const position = onchainTable("position", (t) => ({
   chainId: t.integer().notNull(),
 }),
   (table) => ({
+    pk: primaryKey({ columns: [table.owner, table.tickLower, table.tickUpper, table.salt] }),
+    positionIdIndex: index().on(table.positionId),
     poolIdIndex: index().on(table.poolId),
     ownerIndex: index().on(table.owner),
     chainIdIndex: index().on(table.chainId),
